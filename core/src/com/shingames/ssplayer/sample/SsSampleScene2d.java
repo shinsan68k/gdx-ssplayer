@@ -63,8 +63,6 @@ public class SsSampleScene2d extends ApplicationAdapter {
                 Gdx.app.debug("SSP", data.name);
             }
 
-//            String animeName = "effect019_hadou2";
-//            SsJsonData.AnimationData data = jsonData.findByName(animeName);
             int animeIndex = 0;
             SsJsonData.AnimationData data = jsonData.get(animeIndex);
             
