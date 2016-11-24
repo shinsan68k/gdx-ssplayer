@@ -1,10 +1,17 @@
 
 package com.shingames.ssplayer;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shingames.ssplayer.SsJsonData.AnimationData;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.zip.GZIPInputStream;
 
 /**
  * JSONマッピング用
@@ -33,6 +40,41 @@ public class SsJsonData extends ArrayList<AnimationData>{
             }
         }
         throw new RuntimeException("not found:" + name);//見つからなかった
+    }
+    
+    /**
+     * JSONを読み込む。ファイル名が.gzipまたは.gzで終わっていたならばgzip圧縮とみなし展開する。
+     * @param file
+     * @return 
+     * @throws java.io.IOException 
+     */
+    public static SsJsonData create(FileHandle file) throws IOException{
+        Gdx.app.debug("SSP", "load file :" + file.path());
+        
+        String json;
+        
+        if(file.name().endsWith(".gz") || file.name().endsWith(".gzip")){
+            ByteArrayOutputStream out = new ByteArrayOutputStream(128*1024);
+            GZIPInputStream in = new GZIPInputStream(file.read(64*1024));
+            byte[] buf = new byte[32*1024];
+            while(true){
+                int len = in.read(buf);
+                if(len < 0){
+                    break;
+                }
+                out.write(buf, 0, len);
+            }
+            json = out.toString("UTF-8");
+            
+        }else{
+        
+            json = file.readString("UTF-8");
+        }
+
+        ObjectMapper om = new ObjectMapper();
+        SsJsonData jsonData = om.readValue(json, SsJsonData.class);
+        
+        return jsonData;
     }
     
     /**

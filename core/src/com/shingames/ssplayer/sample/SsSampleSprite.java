@@ -3,11 +3,10 @@ package com.shingames.ssplayer.sample;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Logger;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shingames.ssplayer.SsAnimation;
 import com.shingames.ssplayer.SsImageList;
 import com.shingames.ssplayer.SsJsonData;
@@ -52,10 +51,8 @@ public class SsSampleSprite extends ApplicationAdapter {
 //        String root = "charatemplate1/";
         
         try {
-            String json = Gdx.files.internal(jsonName).readString("UTF-8");
-    
-            ObjectMapper om = new ObjectMapper();
-            SsJsonData jsonData = om.readValue(json, SsJsonData.class);
+            FileHandle file = Gdx.files.internal(jsonName);
+            SsJsonData jsonData = SsJsonData.create(file);
             int animeIndex = 0;
             
             ssImageList = new SsImageList(assetManager, jsonData.get(animeIndex).images, root);

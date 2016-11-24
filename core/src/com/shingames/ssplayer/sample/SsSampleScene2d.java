@@ -3,11 +3,11 @@ package com.shingames.ssplayer.sample;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Logger;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shingames.ssplayer.SsAnimation;
 import com.shingames.ssplayer.SsImageList;
 import com.shingames.ssplayer.SsJsonData;
@@ -44,7 +44,7 @@ public class SsSampleScene2d extends ApplicationAdapter {
         stage = new Stage();
         
         
-        String jsonName = "datas/animetest.json";
+        String jsonName = "datas/animetest.json.gz";
         String root = "datas";
         
 //        String jsonName = "newsplash/newsplash256.json";
@@ -54,10 +54,8 @@ public class SsSampleScene2d extends ApplicationAdapter {
 //        String root = "charatemplate1/";
         
         try {
-            String json = Gdx.files.internal(jsonName).readString("UTF-8");
-    
-            ObjectMapper om = new ObjectMapper();
-            SsJsonData jsonData = om.readValue(json, SsJsonData.class);
+            FileHandle file = Gdx.files.internal(jsonName);
+            SsJsonData jsonData = SsJsonData.create(file);
             
             for(SsJsonData.AnimationData data : jsonData){
                 Gdx.app.debug("SSP", data.name);
@@ -77,6 +75,7 @@ public class SsSampleScene2d extends ApplicationAdapter {
             image.debug();
         } catch (IOException ex) {
             Gdx.app.error("SSP", "load error", ex);
+            Gdx.app.exit();
         }
         
     }
