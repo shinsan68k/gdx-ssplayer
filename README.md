@@ -11,6 +11,7 @@ HTML5版をlibGDX用に移植したものです。
 
 https://github.com/SpriteStudio/Ss5ConverterToSSAJSON/wiki
 
+JSONデータは大きいのでgzipで圧縮されたものを展開できるようになっています。.gzまたは.gzipで終わるファイル名にしてください。
 
 
 ##構成
